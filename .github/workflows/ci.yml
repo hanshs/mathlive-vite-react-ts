@@ -1,0 +1,29 @@
+name: ci
+on:
+    push:
+        branches: [main]
+    pull_request:
+        types: [opened, synchronize]
+
+jobs:
+    tests-job:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                node-version: [16.15.1]
+                os: [ubuntu-latest]
+
+        name: Node ${{ matrix.node-version }} - OS ${{ matrix.os }}
+
+        steps:
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache-dependency-path: |
+                      package-lock.json
+
+            - name: Run tests
+              run: |
+                  npm install
+                  npm run build

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { makeSharedVirtualKeyboard } from 'mathlive';
 import Mathfield, { IMathfieldProps } from './Mathfield';
 
 function App() {
@@ -13,20 +12,12 @@ function App() {
     setFields(fields.map((f, i) => (i === index ? { ...f, value } : f)));
   };
 
-  React.useEffect(() => {
-    makeSharedVirtualKeyboard({});
-    console.log('invoked makeSharedVirtualKeyboard');
-  }, []);
-
   return (
     <>
       {fields.map((field, i) => (
         <Mathfield
           key={i}
           value={field.value}
-          options={{
-            virtualKeyboardMode: 'onfocus',
-          }}
           onChange={(value) => onChange(value, i)}
         />
       ))}

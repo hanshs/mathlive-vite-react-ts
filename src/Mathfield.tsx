@@ -1,14 +1,14 @@
 import * as React from 'react';
 import * as Mathlive from 'mathlive';
 
+type CustomElement<T> = Partial<T & React.DOMAttributes<T>>;
+
 declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'math-field': React.HTMLAttributes<Mathlive.MathfieldElement> & {
-        ref: React.RefObject<Mathlive.MathfieldElement>;
-      };
-    }
-  }
+	namespace JSX {
+		interface IntrinsicElements {
+			'math-field': CustomElement<Mathlive.MathfieldElementAttributes>;
+		}
+	}
 }
 
 export interface IMathfieldProps {
@@ -17,40 +17,22 @@ export interface IMathfieldProps {
   onChange?: (value: string) => void;
 }
 
+
+Mathlive.MathfieldElement.locale = 'et';
+Mathlive.MathfieldElement.decimalSeparator = ',';
+Mathlive.MathfieldElement.keypressSound = 'none';
+Mathlive.MathfieldElement.plonkSound = 'none';
+
 export default function Mathfield(props: IMathfieldProps) {
-  const ref = React.useRef<Mathlive.MathfieldElement>(null);
+  const mathfield = React.useRef<Mathlive.MathfieldElement>();
 
-  const onInput = () => props.onChange?.(ref.current?.getValue() || '');
+  const onInput = () => props.onChange?.(mathfield.current?.getValue() || '');
 
-  React.useEffect(() => {
-    ref.current?.setOptions({
-      locale: 'et',
-      ...props.options,
-    });
-  }, [ref.current?.setOptions, props.options]);
+	const init = (mf: Mathlive.MathfieldElement | null) => {
+		if (mf) {
+			mathfield.current = mf;
+		}
+	};
 
-  React.useEffect(() => {
-    ref.current?.addEventListener('input', onInput);
-
-    return () => {
-      ref.current?.removeEventListener('input', onInput);
-    };
-  }, [ref.current?.addEventListener, props.onChange]);
-
-  React.useEffect(() => {
-    if (ref.current?.getValue() !== props.value) {
-      ref.current?.setValue(props.value);
-    }
-  }, [props.value]);
-
-  React.useEffect(() => {
-    console.log('Mathfield mounts');
-  }, []);
-
-  const attributes: Partial<Mathlive.MathfieldElementAttributes> = {
-    'keypress-sound': 'none',
-    'plonk-sound': 'none',
-  };
-
-  return <math-field ref={ref} {...attributes} />;
+  return <math-field ref={init} onInput={onInput} />;
 }

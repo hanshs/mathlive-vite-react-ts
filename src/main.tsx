@@ -7,9 +7,7 @@ import 'mathlive/dist/mathlive-static.css';
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  // for some weird reasons in React 18 mount effects trigger twice in strict mode
-  // so I comment it out
-  // <React.StrictMode>
+  <React.StrictMode>
     <App />
-  // </React.StrictMode>
+  </React.StrictMode>
 )
