@@ -8,7 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "mathlive": "^0.94.8",
+    "mathlive": "^0.95.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
